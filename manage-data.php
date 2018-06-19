@@ -33,22 +33,24 @@
 
        // Sanitise URL supplied values
 
-       $id 	        = filter_var($obj->id, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
+       $id        = filter_var($obj->id, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
        $login 	  = filter_var($obj->login, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
        $senha	  = filter_var($obj->senha, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
        $nome	  = filter_var($obj->nome, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
-       $endereco	  = filter_var($obj->endereco, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
+       $endereco  = filter_var($obj->endereco, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
+       $imagem    = filter_var($obj->imagem, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
 
       
        // Attempt to run PDO prepared statement
        try {
-          $sql 	= "INSERT INTO usuarios(id_usu,login_usu, senha_usu, nome_usu, endereco_usu) VALUES(:id,:login, :senha, :nome, :endereco)";
+          $sql 	= "INSERT INTO usuarios(id_usu,login_usu, senha_usu, nome_usu, endereco_usu,imagem_usu) VALUES(:id,:login, :senha, :nome, :endereco, :imagem)";
           $stmt 	= $pdo->prepare($sql);
           $stmt->bindParam(':id', $id, PDO::PARAM_STR);
           $stmt->bindParam(':login', $login, PDO::PARAM_STR);
           $stmt->bindParam(':senha', $senha, PDO::PARAM_STR);
           $stmt->bindParam(':nome', $nome, PDO::PARAM_STR);
           $stmt->bindParam(':endereco', $endereco, PDO::PARAM_STR);
+          $stmt->bindParam(':imagem', $imagem, PDO::PARAM_STR);
           $stmt->execute();
 
           echo json_encode(array('message' => 'Congratulations the record'));
@@ -57,7 +59,6 @@
        catch(PDOException $e)
        {
           echo $e->getMessage();
-          echo "aqui";
        }
 
     break;
@@ -73,16 +74,18 @@
        $senha	  = filter_var($obj->senha, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
        $nome	  = filter_var($obj->nome, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
        $endereco	  = filter_var($obj->endereco, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
+       $imagem	  = filter_var($obj->imagem, FILTER_SANITIZE_STRING, FILTER_FLAG_ENCODE_LOW);
 
        // Attempt to run PDO prepared statement
        try {
-          $sql 	= "UPDATE usuarios SET login_usu = :login, senha_usu = :senha, nome_usu = :nome, endereco_usu = :endereco WHERE id_usu = :id";
-          $stmt 	=	$pdo->prepare($sql);
+          $sql 	= "UPDATE usuarios SET login_usu = :login, senha_usu = :senha, nome_usu = :nome, endereco_usu = :endereco, imagem_usu = :imagem WHERE id_usu = :id";
+          $stmt = $pdo->prepare($sql);
           $stmt->bindParam(':id', $id, PDO::PARAM_STR);
           $stmt->bindParam(':login', $login, PDO::PARAM_STR);
           $stmt->bindParam(':senha', $senha, PDO::PARAM_INT);
           $stmt->bindParam(':nome', $nome, PDO::PARAM_INT);
           $stmt->bindParam(':endereco', $endereco, PDO::PARAM_INT);
+          $stmt->bindParam(':imagem', $imagem, PDO::PARAM_INT);
           $stmt->execute();
 
           echo json_encode('Congratulations the record ' . $login . ' was updated');
